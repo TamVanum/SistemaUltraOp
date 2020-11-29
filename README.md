@@ -1,21 +1,21 @@
 # SistemaUltraOp 
 
 ## Descripción
-Sistema encargado principalmente en la asistencia del **stock** de los productos, 
+Sistema encargado principalmente en la asistencia del **stock de los productos**, 
 ya sea de una tienda comercial, Supermercado, Minimarket, etc. 
 
 ## Integrantes
-- Gastón Hernán Cathalifaud Rosales
+- **Gastón Hernán Cathalifaud Rosales**
     - Frontend Developer
-- Santiago Ignacio Fierro Madrid
+- **Santiago Ignacio Fierro Madrid**
     - Backend Developer
 
 ## Modelo Entidad-Relación
 ![Modelo E-R](docs/stock_productos.png)
 
-### Entidades
+## Entidades
 
-#### user
+### user
 
 | **Columna** | Tipo | **Descripción** |
 |-------------|------|-----------------|
