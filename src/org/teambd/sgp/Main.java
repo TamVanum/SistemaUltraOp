@@ -1,5 +1,6 @@
 package org.teambd.sgp;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 
 import javax.swing.*;
@@ -20,20 +21,22 @@ public class Main {
             @Override
             public void run() {
                 FormLogin login = null;
+                /**
                 try {
-                    login = new FormLogin("Login"); // Al iniciar el programa creamos la ventana del Login
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedLookAndFeelException e) {
-                    e.printStackTrace();
+                    login = new FormLogin(""); // Al iniciar el programa creamos la ventana del Login
+                } catch (SQLException throwables) {
+                    JOptionPane.showMessageDialog(null, "Error de Conexion: " + throwables.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    throwables.printStackTrace();
                 } catch (ClassNotFoundException e) {
+                    JOptionPane.showMessageDialog(null, "No se encuentran los drivers: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     e.printStackTrace();
                 }
-
+                 */
             }
         });
+
+        new FormMain();
+
     }
 
 

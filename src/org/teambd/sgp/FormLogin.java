@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class FormLogin extends JFrame{
     private JPanel pnlLogin;
@@ -15,7 +17,7 @@ public class FormLogin extends JFrame{
     private JPanel pnlLoginContent;
 
 
-    public FormLogin(String formLogin) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+    public FormLogin(){
         super("login");
         add(pnlLogin);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -24,12 +26,31 @@ public class FormLogin extends JFrame{
         setLocationRelativeTo(null);
 
         //color de fondo
-        pnlLogin.setBackground(Color.decode("#455A64"));
-        pnlLoginContent.setBackground(Color.decode("#607D8B"));
+        pnlLogin.setBackground(Color.decode("#c7c7c7"));
+        pnlLoginContent.setBackground(Color.decode("#ffffff"));
 
         //colore del boton
-        btnLoggin.setBackground(Color.decode("#9E9E9E"));
+
         setVisible(true);
+
+        btnLoggin.setBackground(Color.decode("#9E9E9E"));
+        btnLoggin.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                btnLoggin.setBackground(Color.decode("#9E9E9E"));
+                btnLoggin.setForeground(Color.decode("#000000"));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                btnLoggin.setBackground(Color.decode("#9E9E9E"));
+                btnLoggin.setForeground(Color.decode("#000000"));
+            }
+        });
+
+
 
 
         btnLoggin.addActionListener(new ActionListener() {
@@ -40,9 +61,5 @@ public class FormLogin extends JFrame{
 
             }
         });
-
-
-
-
     }
 }

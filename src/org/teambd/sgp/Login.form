@@ -10,7 +10,7 @@
       <grid id="f53ec" binding="pnlLoginContent" layout-manager="GridBagLayout">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <gridbag top="0" left="20" bottom="0" right="20" weightx="1.0" weighty="1.0"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="1.0" weighty="1.0"/>
         </constraints>
         <properties/>
         <border type="none"/>
@@ -47,16 +47,6 @@
               <text value="User"/>
             </properties>
           </component>
-          <component id="87121" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="0" left="10" bottom="0" right="0" weightx="0.0" weighty="1.0"/>
-            </constraints>
-            <properties>
-              <font name="Segoe UI Black" size="8" style="1"/>
-              <text value="Sign In"/>
-            </properties>
-          </component>
           <component id="99508" class="javax.swing.JLabel" binding="lblPass">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
@@ -75,6 +65,16 @@
             <properties>
               <font name="Segoe UI Historic"/>
               <text value="Loggin"/>
+            </properties>
+          </component>
+          <component id="87121" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="1.0"/>
+            </constraints>
+            <properties>
+              <font name="Segoe UI Historic" size="16" style="1"/>
+              <text value="Sign In"/>
             </properties>
           </component>
         </children>
