@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class DAOProduct implements DAO<Product> {
+
+    // TODO: crear funcion que recupere el producto
+
     @Override
     public List<Product> getAll() throws SQLException {
         return null;
@@ -26,6 +29,7 @@ public class DAOProduct implements DAO<Product> {
         return 0;
     }
 
+    // TODO: En vez de hacer un delete, hacer un update
     @Override
     public int delete(int id) throws SQLException {
         return 0;

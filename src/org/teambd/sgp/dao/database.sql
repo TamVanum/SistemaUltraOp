@@ -34,7 +34,6 @@ CREATE TABLE product (
     id INT AUTO_INCREMENT NOT NULL,
     name VARCHAR(100) NOT NULL,
     description TEXT NULL,
-    image_path VARCHAR null,
     brand_id_fk INT NOT NULL,
     category_id_fk INT NOT NULL,
     elaboration_date DATE NOT NULL,
@@ -43,13 +42,10 @@ CREATE TABLE product (
     net_price INT NOT NULL DEFAULT 0,
     stock INT NOT NULL DEFAULT 0,
     is_great BIT(1) NOT NULL DEFAULT 0,
-    is_active BIT(1) NOT NULL DEFAULT 1,
+    is_active BIT(1) NOT NULL DEFAULT 1
 );
 
-CREATE TRIGGER change_price
-BEFORE UPDATE ON product FOR EACH ROW
-INSERT INTO price_history (product_id_fk, actual_price, new_price, update_date) VALUES
-(OLD.id, OLD.net_price, NEW.net_price, NOW());
+-- TODO: Crear trigger que aplique el iva (precio neto)
 
 -- Data
 INSERT INTO user (username, password, permission) VALUES
@@ -74,3 +70,17 @@ INSERT INTO category (name) VALUES
 ("Comida"),
 ("Electronica");
 
+INSERT INTO product
+(name, description, brand_id_fk, category_id_fk, elaboration_date, expiration_date,
+gross_price, stock, is_great)
+VALUES
+('Mayo Supreme',           'La raja',                  1, 4, NOW(), NULL, 790,   14, 1),
+('Keptchup Supreme',       'existe?',                  1, 4, NOW(), NULL, 890,   14, 0),
+('Coca-Cola 3L',           'bebida de fantasia',       2, 1, NOW(), NULL, 2520,  36, 1),
+('Sprite 3L',              'bebida de fantasia',       2, 1, NOW(), NULL, 2520,  24, 0),
+('Pepsi 3L',               'bebida copia de fantasia', 3, 1, NOW(), NULL, 1720,  36, 1),
+('Bilz 3L',                'yo quiero otro mundo',     3, 1, NOW(), NULL, 1720,  24, 0),
+('Saco de harina',         '25kg',                     4, 4, NOW(), NULL, 11990, 40, 0),
+('2/8 Mortadela de cerdo', 'Turin de cerdo',           5, 2, NOW(), NULL, 1520,  10, 1),
+('1/4 Jamon colonial',     'Turin colonial',           6, 2, NOW(), NULL, 2690,  5,  0),
+('Leche entera',           '1L',                       7, 3, NOW(), NULL, 990,   10, 0);
