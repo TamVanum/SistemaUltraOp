@@ -1,5 +1,7 @@
 package org.teambd.sgp;
 
+import org.teambd.sgp.dao.*;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -34,9 +36,15 @@ public class FormMain extends JFrame{
     private JScrollPane tbdBrands;
     private JScrollPane tbdCategories;
 
+    private MyConnection connection;
+    private DAOProduct daoProduct;
+    private DAOBrand daoBrand;
+    private DAOCategory daoCategory;
+    private DAOPriceHistory daoPriceHistory;
 
-    public FormMain(){
+    public FormMain(MyConnection connection){
         super("Menu");
+        this.connection = connection;
         add(pnlMain);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(new Dimension(900, 500));

@@ -1,11 +1,16 @@
 package org.teambd.sgp;
 
+import org.teambd.sgp.dao.DAOUser;
+import org.teambd.sgp.dao.MyConnection;
+import org.teambd.sgp.models.User;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class FormLogin extends JFrame{
     private JPanel pnlLogin;
@@ -16,9 +21,11 @@ public class FormLogin extends JFrame{
     private JButton btnLoggin;
     private JPanel pnlLoginContent;
 
+    private MyConnection connection;
 
-    public FormLogin(){
+    public FormLogin(MyConnection connection){
         super("login");
+        this.connection = connection;
         add(pnlLogin);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(new Dimension(300, 350));
@@ -56,9 +63,28 @@ public class FormLogin extends JFrame{
         btnLoggin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String username = txtUser.getText();
+                char[] charPassword = pswPass.getPassword();
+                String password = new String(charPassword);
 
-                //codigo unu
+                if ( !username.isBlank() && !password.isBlank() ) {
+                    DAOUser daoUser = new DAOUser(connection);
+                    try {
+                        User user = daoUser.login(username, password);
+                        if ( user != null ) {
+                            SwingUtilities.invokeLater(() -> {
+                                new FormMain(connection);
+                            });
+                        } else {
+                            JOptionPane.showMessageDialog(null, "User not found in db", "Warning", JOptionPane.WARNING_MESSAGE);
+                        }
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
 
+                } else {
+                   JOptionPane.showMessageDialog(null, "Empty Fields", "Warning", JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
     }
