@@ -36,6 +36,7 @@ public class Main {
         new FormMain();
         new FormAddProd();
         new FormUpdateProd();
+        new FormLogin();
 
     }
 

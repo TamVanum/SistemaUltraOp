@@ -2,6 +2,8 @@ package org.teambd.sgp;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class FormAddProd extends JFrame{
     private JPanel pnlAgregar;
@@ -27,6 +29,25 @@ public class FormAddProd extends JFrame{
         setLocationRelativeTo(null);
         setVisible(true);
 
+        //color de fondo
+        pnlAgregar.setBackground(Color.decode("#c7c7c7"));
+        pnlAddData.setBackground(Color.decode("#ffffff"));
 
+        //colore del boton
+
+        setVisible(true);
+
+        btnAdd.setBackground(Color.decode("#9E9E9E"));
+        btnAdd.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+            }
+        });
     }
 }
