@@ -8,6 +8,7 @@ import java.util.List;
 public class DAOProduct implements DAO<Product> {
 
     // TODO: crear funcion que recupere el producto
+    // TODO: Mostrar solamente los datos marcados como activos
 
     @Override
     public List<Product> getAll() throws SQLException {
