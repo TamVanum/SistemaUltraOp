@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.text.Normalizer;
 
 public class FormLogin extends JFrame{
     private JPanel pnlLogin;
@@ -36,7 +37,7 @@ public class FormLogin extends JFrame{
         pnlLogin.setBackground(Color.decode("#c7c7c7"));
         pnlLoginContent.setBackground(Color.decode("#ffffff"));
 
-        //colore del boton
+        //colores del boton
 
         setVisible(true);
 
@@ -75,6 +76,7 @@ public class FormLogin extends JFrame{
                             SwingUtilities.invokeLater(() -> {
                                 new FormMain(connection);
                             });
+                            setVisible(false);
                         } else {
                             JOptionPane.showMessageDialog(null, "User not found in db", "Warning", JOptionPane.WARNING_MESSAGE);
                         }

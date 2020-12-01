@@ -7,7 +7,6 @@ public class Product {
     private int id;
     private String name;
     private String description;
-    private String imagePath;
     private int brandIdFk;
     private int categoryIdFk;
     private Date elaborationDate;
@@ -21,13 +20,12 @@ public class Product {
     public Product() {
     }
 
-    public Product(int id, String name, String description, String imagePath, int brandIdFk, int categoryIdFk,
+    public Product(int id, String name, String description, int brandIdFk, int categoryIdFk,
                    Date elaborationDate, Date expirationDate, int grossPrice, int netPrice, int stock,
                    boolean isGreat, boolean isActive) {
         this.id = id;
         this.setName(name);
         this.description = description;
-        this.imagePath = imagePath;
         this.setBrandIdFk(brandIdFk);
         this.setCategoryIdFk(categoryIdFk);
         this.elaborationDate = elaborationDate;
@@ -63,13 +61,8 @@ public class Product {
         this.description = description;
     }
 
-    public String getImagePath() {
-        return imagePath;
-    }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
+
 
     public int getBrandIdFk() {
         return brandIdFk;
@@ -169,7 +162,6 @@ public class Product {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", imagePath='" + imagePath + '\'' +
                 ", brandIdFk=" + brandIdFk +
                 ", categoryIdFk=" + categoryIdFk +
                 ", elaborationDate=" + elaborationDate +

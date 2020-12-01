@@ -1,6 +1,7 @@
 package org.teambd.sgp;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,6 +20,9 @@ public class FormAddProd extends JFrame{
     private JPanel pnlAddData;
     private JTextArea txtareaDescription;
     private JButton btnAdd;
+
+
+
 
     public FormAddProd(){
         super("Add");
@@ -49,5 +53,8 @@ public class FormAddProd extends JFrame{
                 super.mouseExited(e);
             }
         });
+
+
+
     }
 }
