@@ -26,6 +26,13 @@ public class FormMain extends JFrame{
     private JTextField txtCategorias;
     private JTextField txtMarcas;
     private JPanel pnlTablas;
+    private JCheckBox chkConfirmBrand;
+    private JButton btnDeleteBrand;
+    private JCheckBox chkConfirmCat;
+    private JButton btnDeleteCat;
+    private JScrollPane tbdHistory;
+    private JScrollPane tbdBrands;
+    private JScrollPane tbdCategories;
 
 
     public FormMain(){

@@ -1,10 +1,8 @@
 package org.teambd.sgp;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 
 import javax.swing.*;
-import java.sql.SQLException;
 
 public class Main {
 
@@ -36,6 +34,8 @@ public class Main {
         });
 
         new FormMain();
+        new FormAddProd();
+        new FormUpdateProd();
 
     }
 
