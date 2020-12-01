@@ -69,7 +69,7 @@ DELIMITER //
 CREATE TRIGGER apply_net_price AFTER INSERT ON product
     FOR EACH ROW
 BEGIN
-    UPDATE product SET NEW.net_price = NEW.gross_price * 1.19;
+    SET NEW.net_price = NEW.gross_price * 1.19;
 END //
 DELIMITER ;
 
@@ -79,7 +79,7 @@ DELIMITER //
 CREATE TRIGGER change_price BEFORE UPDATE ON product
     FOR EACH ROW
 BEGIN
-    INSERT INTO product (product_id_fk, actual_price, new_price, update_date)
+    INSERT INTO price_history (product_id_fk, actual_price, new_price, update_date)
     VALUES (OLD.id, OLD.net_price, NEW.net_price, NOW());
 END //
 DELIMITER ;
