@@ -4,7 +4,7 @@ CREATE DATABASE poduct_stock;
 USE poduct_stock;
 
 -- Tables
-DROP TABLE user;
+DROP TABLE IF EXISTS user;
 CREATE TABLE user (
     id INT AUTO_INCREMENT NOT NULL,
     username VARCHAR(100) UNIQUE NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE user (
     PRIMARY KEY(id)
 );
 
-DROP TABLE brand;
+DROP TABLE IF EXISTS brand;
 CREATE TABLE brand (
     id INT AUTO_INCREMENT NOT NULL,
     name VARCHAR(100) UNIQUE NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE brand (
     PRIMARY KEY(id)
 );
 
-DROP TABLE category;
+DROP TABLE IF EXISTS category;
 CREATE TABLE category (
     id INT AUTO_INCREMENT NOT NULL,
     name VARCHAR(100) UNIQUE NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE category (
     PRIMARY KEY(id)
 );
 
-DROP TABLE product;
+DROP TABLE IF EXISTS product;
 CREATE TABLE product (
     id INT AUTO_INCREMENT NOT NULL,
     name VARCHAR(100) NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE product (
     FOREIGN KEY(category_id_fk) REFERENCES category(id)
 );
 
-DROP TABLE price_history;
+DROP TABLE IF EXISTS price_history;
 CREATE TABLE price_history (
     id INT AUTO_INCREMENT NOT NULL,
     product_id_fk INT NOT NULL,
@@ -63,10 +63,22 @@ CREATE TABLE price_history (
     FOREIGN KEY(product_id_fk) REFERENCES product(id)
 );
 
--- Triggers
-DROP TRIGGER apply_net_price;
+
+-- Function
+DROP FUNCTION IF EXISTS update_date;
 DELIMITER //
-CREATE TRIGGER apply_net_price AFTER INSERT ON product
+CREATE FUNCTION update_iva (_id INT, _gross_price INT) RETURNS INT
+  BEGIN
+    UPDATE product SET net_price = _gross_price * 1.19;
+    RETURN (SELECT net_price FROM product WHERE id = _id);
+  END //
+DELIMITER ;
+
+
+-- Triggers
+DROP TRIGGER IF EXISTS apply_net_price;
+DELIMITER //
+CREATE TRIGGER apply_net_price BEFORE INSERT ON product
     FOR EACH ROW
 BEGIN
     SET NEW.net_price = NEW.gross_price * 1.19;
@@ -74,15 +86,21 @@ END //
 DELIMITER ;
 
 
-DROP TRIGGER change_price;
+DROP TRIGGER IF EXISTS change_price;
 DELIMITER //
 CREATE TRIGGER change_price BEFORE UPDATE ON product
     FOR EACH ROW
 BEGIN
-    INSERT INTO price_history (product_id_fk, actual_price, new_price, update_date)
-    VALUES (OLD.id, OLD.net_price, NEW.net_price, NOW());
+    IF UPDATE OLD.gross_price THEN
+        DECLARE _new_net_price INT;
+        SET _new_net_price = update_iva(OLD.id, OLD.gross_price);
+        INSERT INTO price_history (product_id_fk, actual_price, new_price, update_date)
+        VALUES (OLD.id, _new_net_price, NEW.net_price, NOW());
+    END IF;
 END //
 DELIMITER ;
+
+
 
 
 -- Data
@@ -122,7 +140,7 @@ INSERT INTO product
 gross_price, stock, is_great)
 VALUES
 ('Mayo Supreme',           'La raja',                  1, 4, NOW(), NULL, 790,   14, 1),
-('Keptchup Supreme',       'existe?',                  1, 4, NOW(), NULL, 890,   14, 0),
+('Keptchup Supreme',       'existe?',                  1, 4, NOW(), NULL, 990,   14, 0),
 ('Coca-Cola 3L',           'bebida de fantasia',       2, 1, NOW(), NULL, 2520,  36, 1),
 ('Sprite 3L',              'bebida de fantasia',       2, 1, NOW(), NULL, 2520,  24, 0),
 ('Pepsi 3L',               'bebida copia de fantasia', 3, 1, NOW(), NULL, 1720,  36, 1),
@@ -132,7 +150,7 @@ VALUES
 ('1/4 Jamon colonial',     'Turin colonial',           6, 2, NOW(), NULL, 2690,  5,  0),
 ('Leche entera',           '1L',                       7, 3, NOW(), NULL, 990,   10, 0);
 
-UPDATE product SET gross_price = 990 WHERE id = 2;
+UPDATE product SET gross_price = 550 WHERE id = 2;
 
 SELECT * FROM product;
 SELECT * FROM price_history;
