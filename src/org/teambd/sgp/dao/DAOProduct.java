@@ -91,7 +91,27 @@ public class DAOProduct implements DAO<Product> {
 
     @Override
     public int insert(Product product) throws SQLException {
-        return 0;
+        String sql = "INSERT INTO product " +
+                "(name, description, brand_id_fk, category_id_fk, elaboration_date, expiration_date, " +
+                "gross_price, stock, is_great) " +
+                "VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement ps = myConnection
+                .getConnection()
+                .prepareStatement(sql);
+        ps.setString(1, product.getName());
+        ps.setString(2, product.getDescription());
+        ps.setInt(3, product.getBrandIdFk());
+        ps.setInt(4, product.getCategoryIdFk());
+        ps.setDate(5, product.getElaborationDate());
+        ps.setDate(6, product.getExpirationDate());
+        ps.setInt(7, product.getGrossPrice());
+        ps.setInt(8, product.getStock());
+        ps.setInt(9, product.isGreat() ? 1 : 0);
+
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected;
+
     }
 
     @Override
@@ -145,5 +165,41 @@ public class DAOProduct implements DAO<Product> {
 
         return rowAffected;
     }
+
+    public List<Product> getAllCachero() throws SQLException {
+        String sql = "SELECT id, name, description, brand_id_fk, category_id_fk, elaboration_date, " +
+                "expiration_date, gross_price, net_price, stock, is_great, is_active " +
+                "FROM product "+
+                "WHERE is_active = 1 AND is_great = 1"+
+                "ORDER BY id ASC";
+        List<Product> products2;
+        ResultSet rs = myConnection
+                .getConnection()
+                .createStatement()
+                .executeQuery(sql);
+        if ( rs.next() ) {
+            products2 = new ArrayList<>();
+            do {
+                products2.add(new Product(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("brand_id_fk"),
+                        rs.getInt("category_id_fk"),
+                        rs.getDate("elaboration_date"),
+                        rs.getDate("expiration_date"),
+                        rs.getInt("gross_price"),
+                        rs.getInt("net_price"),
+                        rs.getInt("stock"),
+                        rs.getBoolean("is_great"),
+                        rs.getBoolean("is_active")
+                ));
+            } while (rs.next() );
+        }else {
+            products2 = null;
+        }
+        return products2;
+    }
+
 
 }

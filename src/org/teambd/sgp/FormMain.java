@@ -49,7 +49,7 @@ public class FormMain extends JFrame{
     private JPanel pnlCachero;
     private JPanel pnlCacheroContent;
     private JButton btnMostrarCachero;
-    private JTable table1;
+    private JTable tblCachero;
     private JButton btnModifyCat;
     private JButton btnModifyBrand;
     private JButton btnActivateProd;
@@ -67,8 +67,9 @@ public class FormMain extends JFrame{
     private DefaultTableModel modelCategories;
     private DefaultTableModel modelBrands;
     private DefaultTableModel modelHistory;
+    private DefaultTableModel modelCachero;
 
-    public FormMain(MyConnection connection){
+    public FormMain(MyConnection connection) {
         super("Menu");
         this.connection = connection;
         add(pnlMain);
@@ -144,6 +145,29 @@ public class FormMain extends JFrame{
             throwables.printStackTrace();
         }
 
+        /** TABLA CACHERO */
+        modelCachero = new DefaultTableModel();
+        modelCachero.addColumn("Id");
+        modelCachero.addColumn("Name");
+        modelCachero.addColumn("Description");
+        modelCachero.addColumn("Brand");
+        modelCachero.addColumn("Category");
+        modelCachero.addColumn("Elaboration_Date");
+        modelCachero.addColumn("Expiration_Date");
+        modelCachero.addColumn("Gross_Price");
+        modelCachero.addColumn("Net_Price");
+        modelCachero.addColumn("Stock");
+        tblCachero.setModel(modelCachero);
+
+
+        /** NO FUNCIONA
+        try {
+            showCachero();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+         */
+
 
         /** Boton actualizar de Category */
         btnCategories.addActionListener(this::addCategory);
@@ -167,14 +191,31 @@ public class FormMain extends JFrame{
                 super.mouseClicked(e);
                 int row = tblCategories.rowAtPoint(e.getPoint());
                 int col = tblCategories.columnAtPoint(e.getPoint());
-                if (row >= 0 && col >= 0){
-                    txtCategories.setText(String.valueOf(tblCategories.getValueAt(row , 1)));
+                if (row >= 0 && col >= 0) {
+                    txtCategories.setText(String.valueOf(tblCategories.getValueAt(row, 1)));
 
 
                 }
 
             }
         });
+
+        btnAgregar.addActionListener(this::addProduct);
+
+
+    }
+
+
+
+    private void addProduct(ActionEvent actionEvent) {
+
+        SwingUtilities.invokeLater(()->{
+            new FormAddProd(connection, daoProduct, daoBrand, daoCategory, this);
+        });
+
+
+
+
     }
 
 
@@ -263,7 +304,6 @@ public class FormMain extends JFrame{
 
 
 
-
         /** Boton Actualizar de Producto*/
         btnActualizar.addActionListener(new ActionListener() {
             @Override
@@ -287,6 +327,32 @@ public class FormMain extends JFrame{
         }
 
 
+    }
+
+    private void showCachero() throws SQLException {
+        List<Product> products2 = daoProduct.getAllCachero();
+        if (products2 != null){
+            int rowCount = modelProducts.getRowCount();
+            for (int i = rowCount - 1; i > 0; i--) {
+                modelProducts.removeRow(i);
+            }
+            for (Product product : products2){
+                modelCachero.addRow(new Object[]{
+                        product.getId(),
+                        product.getName(),
+                        product.getDescription(),
+                        daoBrand.getById(product.getBrandIdFk()).getName(),
+                        daoCategory.getById(product.getCategoryIdFk()).getName(),
+                        product.getElaborationDate(),
+                        product.getExpirationDate(),
+                        product.getGrossPrice(),
+                        product.getNetPrice(),
+                        product.getStock()
+                });
+            }
+
+
+         }
     }
 
 
