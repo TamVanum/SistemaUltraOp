@@ -117,7 +117,7 @@
                           <text value="Actualizar"/>
                         </properties>
                       </component>
-                      <scrollpane id="28641" binding="tbdHistory">
+                      <scrollpane id="28641" binding="srcHistory">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="1.0" weighty="1.0"/>
@@ -125,7 +125,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="ad714" class="javax.swing.JTable" binding="tblHistorial">
+                          <component id="ad714" class="javax.swing.JTable" binding="tblHistory">
                             <constraints/>
                             <properties/>
                           </component>
@@ -141,7 +141,7 @@
                     <properties/>
                     <border type="none" title="Brands"/>
                     <children>
-                      <scrollpane id="47649" binding="tbdBrands">
+                      <scrollpane id="47649">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="1.0" weighty="1.0"/>
@@ -210,7 +210,7 @@
                           <text value="Agregar/Modificar"/>
                         </properties>
                       </component>
-                      <scrollpane id="35e1f" binding="tbdCategories">
+                      <scrollpane id="35e1f" binding="tblCategories">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="1.0" weighty="1.0"/>

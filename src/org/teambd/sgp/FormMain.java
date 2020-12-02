@@ -1,6 +1,9 @@
 package org.teambd.sgp;
 
 import org.teambd.sgp.dao.*;
+import org.teambd.sgp.models.Brand;
+import org.teambd.sgp.models.Category;
+import org.teambd.sgp.models.PriceHistory;
 import org.teambd.sgp.models.Product;
 
 import java.awt.*;
@@ -22,7 +25,7 @@ public class FormMain extends JFrame{
     private JButton btnEliminar;
     private JButton btnCategorias;
     private JButton btnHistProd;
-    private JTable tblHistorial;
+    private JTable tblHistory;
     private JTable tblMarcas;
     private JTable tblCategoria;
     private JPanel pnlMarcas;
@@ -36,9 +39,9 @@ public class FormMain extends JFrame{
     private JButton btnDeleteBrand;
     private JCheckBox chkConfirmCat;
     private JButton btnDeleteCat;
-    private JScrollPane tbdHistory;
-    private JScrollPane tbdBrands;
-    private JScrollPane tbdCategories;
+    private JScrollPane srcHistory;
+    private JScrollPane tblBrands;
+    private JScrollPane tblCategories;
     private JPanel pnlCachero;
     private JPanel pnlCacheroContent;
     private JButton btnMostrarCachero;
@@ -51,8 +54,11 @@ public class FormMain extends JFrame{
     private DAOPriceHistory daoPriceHistory;
 
 
-    //---
+    //models of tables
     private DefaultTableModel modelProducts;
+    private DefaultTableModel modelCategories;
+    private DefaultTableModel modelBrands;
+    private DefaultTableModel modelHistory;
 
     public FormMain(MyConnection connection){
         super("Menu");
@@ -64,9 +70,14 @@ public class FormMain extends JFrame{
         setLocationRelativeTo(null);
         setVisible(true);
 
+        /**INICIALIZA DAO's*/
 
+        daoProduct = new DAOProduct(this.connection);
+        daoBrand = new DAOBrand(this.connection);
+        daoCategory = new DAOCategory(this.connection);
+        daoPriceHistory = new DAOPriceHistory(this.connection);
 
-
+        /** TABLA DE PRODUCTOS */
         modelProducts = new DefaultTableModel();
         modelProducts.addColumn("Id");
         modelProducts.addColumn("Name");
@@ -80,12 +91,47 @@ public class FormMain extends JFrame{
         modelProducts.addColumn("Stock");
         tblProducts.setModel(modelProducts);
 
-        daoProduct = new DAOProduct(this.connection);
-        daoBrand = new DAOBrand(this.connection);
-        daoCategory = new DAOCategory(this.connection);
+        try {
+            refresh_table_product();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        /** TABLA CATEGORIES */
+
+        modelCategories = new DefaultTableModel();
+        modelCategories.addColumn("Id");
+        modelCategories.addColumn("Name");
+        tblCategoria.setModel(modelCategories);
 
         try {
-            refresh_table();
+            refresh_table_categories();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        /** TABLA BRANDS */
+        modelBrands = new DefaultTableModel();
+        modelBrands.addColumn("Id");
+        modelBrands.addColumn("Name");
+        tblMarcas.setModel(modelBrands);
+
+        try {
+            refresh_table_brands();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        /** TABLA HISTORIAL */
+        modelHistory = new DefaultTableModel();
+        modelHistory.addColumn("Id");
+        modelHistory.addColumn("Product Name");
+        modelHistory.addColumn("Old Price");
+        modelHistory.addColumn("New Price");
+        modelHistory.addColumn("Change Date");
+        tblHistory.setModel(modelHistory);
+
+        try {
+            refresh_table_historyPrice();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -93,7 +139,7 @@ public class FormMain extends JFrame{
 
     }
 
-    public void refresh_table() throws SQLException {
+    public void refresh_table_product() throws SQLException {
         List<Product> products = daoProduct.getAll();
         if (products != null){
             for (Product product : products) {
@@ -112,5 +158,45 @@ public class FormMain extends JFrame{
             }
         }
 
+    }
+
+    public void refresh_table_categories() throws SQLException {
+        List<Category> categories = daoCategory.getAll();
+        if (categories != null){
+            for (Category category : categories) {
+                modelCategories.addRow(new Object[]{
+                        category.getId(),
+                        category.getName()
+                });
+
+            }
+        }
+    }
+
+    public void refresh_table_brands() throws SQLException {
+        List<Brand> brands = daoBrand.getAll();
+        if (brands != null){
+            for (Brand brand : brands) {
+                modelBrands.addRow(new Object[]{
+                        brand.getId(),
+                        brand.getName()
+                });
+            }
+        }
+    }
+
+    public void refresh_table_historyPrice() throws SQLException {
+        List<PriceHistory> priceHistories = daoPriceHistory.getAll();
+        if (priceHistories != null) {
+            for (PriceHistory priceHistory : priceHistories) {
+                modelHistory.addRow(new Object[]{
+                        priceHistory.getId(),
+                        daoProduct.getById(priceHistory.getProductIdFk()).getName(),
+                        priceHistory.getActualPrice(),
+                        priceHistory.getNewPrice(),
+                        priceHistory.getUpdateDate()
+                });
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package org.teambd.sgp.dao;
 
+import org.teambd.sgp.models.PriceHistory;
 import org.teambd.sgp.models.Product;
 
 import java.sql.PreparedStatement;
@@ -55,7 +56,37 @@ public class DAOProduct implements DAO<Product> {
 
     @Override
     public Product getById(int id) throws SQLException {
-        return null;
+        String sql = "SELECT id, name, description, brand_id_fk, category_id_fk, elaboration_date, " +
+                "expiration_date, gross_price, net_price, stock, is_great, is_active " +
+                "FROM product "+
+                "WHERE id = ? ";
+
+        Product product;
+
+        PreparedStatement ps = myConnection
+                .getConnection()
+                .prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if ( rs.next() ) {
+            product = new Product(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getInt("brand_id_fk"),
+                    rs.getInt("category_id_fk"),
+                    rs.getDate("elaboration_date"),
+                    rs.getDate("expiration_date"),
+                    rs.getInt("gross_price"),
+                    rs.getInt("net_price"),
+                    rs.getInt("stock"),
+                    rs.getBoolean("is_great"),
+                    rs.getBoolean("is_active")
+            );
+        } else {
+            product= null;
+        }
+        return product;
     }
 
     @Override
