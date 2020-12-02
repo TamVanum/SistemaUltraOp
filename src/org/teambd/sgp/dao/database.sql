@@ -66,7 +66,7 @@ CREATE TABLE price_history (
 -- Function
 
 -- Procedures
-DROP PROCEDURE IF EXISTS recursive_eliminator;
+DROP PROCEDURE IF EXISTS recursive_eliminator_brand;
 DELIMITER //
 CREATE PROCEDURE recursive_eliminator_brand(IN _id INT)
 BEGIN
@@ -84,6 +84,26 @@ END //
 DELIMITER ;
 
 CALL recursive_eliminator_brand(2);
+
+
+DROP PROCEDURE IF EXISTS recursive_eliminator_category;
+DELIMITER //
+CREATE PROCEDURE recursive_eliminator_category(IN _id INT)
+BEGIN
+    DECLARE have_childs INT;
+    SET have_childs = (SELECT COUNT(*) FROM product WHERE category_id_fk = _id );
+
+
+    IF have_childs > 0 THEN
+        DELETE FROM product WHERE id IN (SELECT id FROM product WHERE category_id_fk = _id);
+        DELETE FROM category WHERE id = _id;
+    ELSE
+        DELETE FROM category WHERE id = _id;
+    END IF;
+END //
+DELIMITER ;
+
+CALL recursive_eliminator_category(2);
 
 
 -- Triggers
