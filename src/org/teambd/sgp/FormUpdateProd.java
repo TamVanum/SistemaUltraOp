@@ -23,10 +23,10 @@ public class FormUpdateProd extends JFrame{
         add(pnlUpdate);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(new Dimension(350, 500));
-        setPreferredSize(new Dimension(900, 500));
+        setPreferredSize(new Dimension(350, 500));
         setLocationRelativeTo(null);
         setVisible(true);
-
+        
 
     }
 }

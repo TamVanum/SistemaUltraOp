@@ -9,6 +9,8 @@ import org.teambd.sgp.models.Product;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.sql.SQLException;
 
@@ -135,6 +137,18 @@ public class FormMain extends JFrame{
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
+
+
+
+
+        /** Boton Actualizar */
+        btnActualizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
 
 
     }
