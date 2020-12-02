@@ -38,7 +38,7 @@ public class DAOCategory implements DAO<Category> {
 
     @Override
     public List<Category> getAll() throws SQLException {
-        String sql = "SELECT id, name FROM category;";
+        String sql = "SELECT id, name FROM category ORDER BY id ASC;";
         List<Category> categories;
 
         ResultSet rs = connection

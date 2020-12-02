@@ -155,16 +155,16 @@
                           </component>
                         </children>
                       </scrollpane>
-                      <component id="e5828" class="javax.swing.JButton" binding="btnMarcas">
+                      <component id="e5828" class="javax.swing.JButton" binding="btnBrands">
                         <constraints>
-                          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                          <gridbag weightx="0.0" weighty="0.0"/>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="1.0" weighty="0.0"/>
                         </constraints>
                         <properties>
-                          <text value="Agregar/Modificar"/>
+                          <text value="Agregar"/>
                         </properties>
                       </component>
-                      <component id="25f66" class="javax.swing.JTextField" binding="txtMarcas">
+                      <component id="25f66" class="javax.swing.JTextField" binding="txtBrands">
                         <constraints>
                           <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
@@ -191,6 +191,15 @@
                           <text value="Delete"/>
                         </properties>
                       </component>
+                      <component id="8f004" class="javax.swing.JButton" binding="btnModifyBrand">
+                        <constraints>
+                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="1.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="Button"/>
+                        </properties>
+                      </component>
                     </children>
                   </grid>
                   <grid id="76" binding="pnlCategoria" layout-manager="GridBagLayout">
@@ -201,16 +210,16 @@
                     <properties/>
                     <border type="none" title="Categories"/>
                     <children>
-                      <component id="cf3b9" class="javax.swing.JButton" binding="btnCategorias">
+                      <component id="cf3b9" class="javax.swing.JButton" binding="btnCategories">
                         <constraints>
-                          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="1.0" weighty="0.0"/>
                         </constraints>
                         <properties>
-                          <text value="Agregar/Modificar"/>
+                          <text value="Agregar"/>
                         </properties>
                       </component>
-                      <scrollpane id="35e1f" binding="tblCategories">
+                      <scrollpane id="35e1f" binding="srcCategories">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="1.0" weighty="1.0"/>
@@ -218,13 +227,13 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="593c9" class="javax.swing.JTable" binding="tblCategoria">
+                          <component id="593c9" class="javax.swing.JTable" binding="tblCategories">
                             <constraints/>
                             <properties/>
                           </component>
                         </children>
                       </scrollpane>
-                      <component id="1c200" class="javax.swing.JTextField" binding="txtCategorias">
+                      <component id="1c200" class="javax.swing.JTextField" binding="txtCategories">
                         <constraints>
                           <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
@@ -249,6 +258,15 @@
                         </constraints>
                         <properties>
                           <text value="Delete"/>
+                        </properties>
+                      </component>
+                      <component id="2be9c" class="javax.swing.JButton" binding="btnModifyCat">
+                        <constraints>
+                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="1.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="Modificar"/>
                         </properties>
                       </component>
                     </children>

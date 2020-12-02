@@ -9,11 +9,8 @@ import org.teambd.sgp.models.Product;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
-import java.awt.event.ActionListener;
-
-import java.awt.event.KeyEvent;
 import java.sql.Date;
 
 import java.util.List;
@@ -30,17 +27,17 @@ public class FormMain extends JFrame{
     private JButton btnAgregar;
     private JButton btnActualizar;
     private JButton btnEliminar;
-    private JButton btnCategorias;
+    private JButton btnCategories;
     private JButton btnHistProd;
     private JTable tblHistory;
     private JTable tblMarcas;
-    private JTable tblCategoria;
+    private JTable tblCategories;
     private JPanel pnlMarcas;
     private JPanel pnlCategoria;
-    private JButton btnMarcas;
+    private JButton btnBrands;
     private JPanel pnlHistorial;
-    private JTextField txtCategorias;
-    private JTextField txtMarcas;
+    private JTextField txtCategories;
+    private JTextField txtBrands;
     private JPanel pnlTablas;
     private JCheckBox chkConfirmBrand;
     private JButton btnDeleteBrand;
@@ -48,11 +45,13 @@ public class FormMain extends JFrame{
     private JButton btnDeleteCat;
     private JScrollPane srcHistory;
     private JScrollPane tblBrands;
-    private JScrollPane tblCategories;
+    private JScrollPane srcCategories;
     private JPanel pnlCachero;
     private JPanel pnlCacheroContent;
     private JButton btnMostrarCachero;
     private JTable table1;
+    private JButton btnModifyCat;
+    private JButton btnModifyBrand;
 
     private MyConnection connection;
     private DAOProduct daoProduct;
@@ -108,7 +107,7 @@ public class FormMain extends JFrame{
         modelCategories = new DefaultTableModel();
         modelCategories.addColumn("Id");
         modelCategories.addColumn("Name");
-        tblCategoria.setModel(modelCategories);
+        tblCategories.setModel(modelCategories);
 
         try {
             refresh_table_categories();
@@ -143,6 +142,12 @@ public class FormMain extends JFrame{
             throwables.printStackTrace();
         }
 
+
+        /** Boton actualizar de Category */
+        btnCategories.addActionListener(this::addCategory);
+
+        btnModifyCat.addActionListener(this::updateCategory);
+
         btnActualizar.setMnemonic(KeyEvent.VK_C);
         btnActualizar.addActionListener(this::updateProduct);
         btnHistProd.addActionListener(actionEvent -> {
@@ -152,6 +157,80 @@ public class FormMain extends JFrame{
                 throwables.printStackTrace();
             }
         });
+
+
+        tblCategories.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                int row = tblCategories.rowAtPoint(e.getPoint());
+                int col = tblCategories.columnAtPoint(e.getPoint());
+                if (row >= 0 && col >= 0){
+                    txtCategories.setText(String.valueOf(tblCategories.getValueAt(row , 1)));
+
+
+                }
+
+            }
+        });
+    }
+
+
+    private void addCategory(ActionEvent actionEvent) {
+
+        Category category = new Category();
+        int rowSelected = tblCategories.getSelectedRow();
+        if (rowSelected != -1){
+
+        }else {
+            if (txtCategories.getText().isBlank()){
+                JOptionPane.showMessageDialog(null,"Empty field", "Error", JOptionPane.WARNING_MESSAGE);
+            }else {
+                String newCat = txtCategories.getText();
+                category.setName(newCat);
+                try {
+                    daoCategory.insert(category);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+
+                try {
+                    this.refresh_table_categories();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    private void updateCategory(ActionEvent actionEvent) {
+        Category category = new Category();
+        int rowSelected = tblCategories.getSelectedRow();
+        if (rowSelected != -1) {
+
+        }else {
+            if (txtCategories.getText().isBlank()){
+                JOptionPane.showMessageDialog(null,"Empty field", "Error", JOptionPane.WARNING_MESSAGE);
+            }else {
+                //actualizar mode
+                category.setName(txtCategories.getText());
+
+                int rowsAffected = 0;
+                try {
+                    rowsAffected = daoCategory.update(category);
+                    System.out.println(rowsAffected);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+
+                try {
+                    this.refresh_table_categories();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
     }
 
     private void updateProduct(ActionEvent actionEvent) {
@@ -183,7 +262,7 @@ public class FormMain extends JFrame{
 
 
 
-        /** Boton Actualizar */
+        /** Boton Actualizar de Producto*/
         btnActualizar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -205,7 +284,9 @@ public class FormMain extends JFrame{
             JOptionPane.showMessageDialog(this, "Dont selected row", "Warning", JOptionPane.WARNING_MESSAGE);
         }
 
+
     }
+
 
     public void refresh_table_product() throws SQLException {
         List<Product> products = daoProduct.getAll();
@@ -236,6 +317,10 @@ public class FormMain extends JFrame{
     public void refresh_table_categories() throws SQLException {
         List<Category> categories = daoCategory.getAll();
         if (categories != null){
+            int rowCount = modelCategories.getRowCount();
+            for (int i = rowCount - 1; i > 0; i--) {
+                modelCategories.removeRow(i);
+            }
             for (Category category : categories) {
                 modelCategories.addRow(new Object[]{
                         category.getId(),
