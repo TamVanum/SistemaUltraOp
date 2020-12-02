@@ -48,9 +48,10 @@ public class FormUpdateProd extends JFrame{
         add(pnlUpdate);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(new Dimension(350, 500));
-        setPreferredSize(new Dimension(900, 500));
+        setPreferredSize(new Dimension(350, 500));
         setLocationRelativeTo(null);
         setVisible(true);
+
 
         this.connection = connection;
         this.daoProduct = daoProduct;
@@ -139,6 +140,7 @@ public class FormUpdateProd extends JFrame{
 
             int rowsAffected = daoProduct.update(product);
             System.out.println(rowsAffected);
+
 
             formMain.refresh_table_product();
         } catch (SQLException throwables) {

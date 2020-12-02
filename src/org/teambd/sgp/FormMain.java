@@ -10,8 +10,12 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
+
+import java.awt.event.ActionListener;
+
 import java.awt.event.KeyEvent;
 import java.sql.Date;
+
 import java.util.List;
 import java.sql.SQLException;
 
@@ -176,6 +180,17 @@ public class FormMain extends JFrame{
             product.setNetPrice( Integer.parseInt( String.valueOf(tblProducts.getValueAt(rowSelected, 8)) ) );
             product.setStock( Integer.parseInt( String.valueOf(tblProducts.getValueAt(rowSelected, 9)) ) );
 
+
+
+
+        /** Boton Actualizar */
+        btnActualizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
             SwingUtilities.invokeLater(() -> {
                 new FormUpdateProd(
                         connection,
@@ -189,6 +204,7 @@ public class FormMain extends JFrame{
         } else {
             JOptionPane.showMessageDialog(this, "Dont selected row", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+
     }
 
     public void refresh_table_product() throws SQLException {
