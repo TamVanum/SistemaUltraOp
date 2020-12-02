@@ -65,14 +65,7 @@ CREATE TABLE price_history (
 
 
 -- Function
-DROP FUNCTION IF EXISTS update_date;
-DELIMITER //
-CREATE FUNCTION update_iva (_id INT, _gross_price INT) RETURNS INT
-  BEGIN
-    UPDATE product SET net_price = _gross_price * 1.19;
-    RETURN (SELECT net_price FROM product WHERE id = _id);
-  END //
-DELIMITER ;
+
 
 
 -- Triggers
@@ -91,16 +84,11 @@ DELIMITER //
 CREATE TRIGGER change_price BEFORE UPDATE ON product
     FOR EACH ROW
 BEGIN
-    IF UPDATE OLD.gross_price THEN
-        DECLARE _new_net_price INT;
-        SET _new_net_price = update_iva(OLD.id, OLD.gross_price);
-        INSERT INTO price_history (product_id_fk, actual_price, new_price, update_date)
-        VALUES (OLD.id, _new_net_price, NEW.net_price, NOW());
-    END IF;
+    INSERT INTO price_history (product_id_fk, actual_price, new_price, update_date)
+    VALUES (OLD.id, OLD.gross_price, NEW.gross_price, NOW());
+    SET NEW.net_price = NEW.gross_price * 1.19;
 END //
 DELIMITER ;
-
-
 
 
 -- Data
