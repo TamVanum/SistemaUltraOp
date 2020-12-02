@@ -105,7 +105,7 @@ public class DAOCategory implements DAO<Category> {
 
     @Override
     public int delete(int id) throws SQLException {
-        String sql = "DELETE FROM category WHERE id = ? ;";
+        String sql = "CALL recursive_eliminator_category() ;";
         PreparedStatement ps = connection
                 .getConnection()
                 .prepareStatement(sql);

@@ -2,6 +2,7 @@ package org.teambd.sgp.dao;
 
 import org.teambd.sgp.models.Brand;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,7 +40,7 @@ public class DAOBrand implements DAO<Brand> {
 
     @Override
     public List<Brand> getAll() throws SQLException {
-        String sql = "SELECT id, name FROM brand;";
+        String sql = "SELECT id, name FROM brand ORDER BY id ASC;";
         List<Brand> brands;
 
         ResultSet rs = connection
@@ -108,12 +109,10 @@ public class DAOBrand implements DAO<Brand> {
 
     @Override
     public int delete(int id) throws SQLException {
-        String sql = "DELETE FROM brand WHERE id = ? ;";
-        PreparedStatement ps = connection
-                .getConnection()
-                .prepareStatement(sql);
-        ps.setInt(1, id);
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected;
+        String sql = "{ CALL recursive_eliminator_brand(?) }";
+        PreparedStatement preparedStatement = connection.getConnection().prepareStatement(sql);
+        preparedStatement.setInt(1, id);
+        preparedStatement.executeUpdate();
+        return 0;
     }
 }
