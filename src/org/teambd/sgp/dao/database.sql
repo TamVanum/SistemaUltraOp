@@ -1,7 +1,7 @@
 -- Database
-DROP DATABASE poduct_stock;
-CREATE DATABASE poduct_stock;
-USE poduct_stock;
+DROP DATABASE IF EXISTS product_stock;
+CREATE DATABASE product_stock;
+USE product_stock;
 
 -- Tables
 DROP TABLE IF EXISTS user;
@@ -65,15 +65,25 @@ CREATE TABLE price_history (
 
 -- Function
 
-
 -- Procedures
 DROP PROCEDURE IF EXISTS recursive_eliminator;
 DELIMITER //
-CREATE PROCEDURE recursive_eliminator()
+CREATE PROCEDURE recursive_eliminator_brand(IN _id INT)
 BEGIN
+    DECLARE have_childs INT;
+    SET have_childs = (SELECT COUNT(*) FROM product WHERE brand_id_fk = _id );
 
+
+    IF have_childs > 0 THEN
+        DELETE FROM product WHERE id IN (SELECT id FROM product WHERE brand_id_fk = _id);
+        DELETE FROM brand WHERE id = _id;
+    ELSE
+        DELETE FROM brand WHERE id = _id;
+    END IF;
 END //
 DELIMITER ;
+
+CALL recursive_eliminator_brand(2);
 
 
 -- Triggers
@@ -119,6 +129,9 @@ INSERT INTO brand (name) VALUES
 ("PF"),
 ("San Jorge"),
 ("Colum: toda la magia del sur");
+
+INSERT INTO brand (name) VALUES
+("Comafri");
 
 SELECT * FROM brand;
 

@@ -76,7 +76,7 @@ public class FormUpdateProd extends JFrame{
             }
 
             cboBrand.setModel(comboBoxModelBrands);
-            cboBrand.setSelectedIndex(product.getBrandIdFk() - 1);
+            cboBrand.setSelectedIndex(product.getBrandIdFk());
 
 
             /* CATEGORY */
@@ -88,7 +88,7 @@ public class FormUpdateProd extends JFrame{
             }
 
             cboCategory.setModel(comboBoxModelCategories);
-            cboCategory.setSelectedIndex(product.getCategoryIdFk() - 1);
+            cboCategory.setSelectedIndex(product.getCategoryIdFk());
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
