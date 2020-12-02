@@ -9,6 +9,9 @@ import org.teambd.sgp.models.Product;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.sql.Date;
 import java.util.List;
 import java.sql.SQLException;
 
@@ -136,12 +139,66 @@ public class FormMain extends JFrame{
             throwables.printStackTrace();
         }
 
+        btnActualizar.setMnemonic(KeyEvent.VK_C);
+        btnActualizar.addActionListener(this::updateProduct);
+        btnHistProd.addActionListener(actionEvent -> {
+            try {
+                refresh_table_historyPrice(actionEvent);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+    }
 
+    private void updateProduct(ActionEvent actionEvent) {
+        int rowSelected = tblProducts.getSelectedRow();
+        if ( rowSelected != -1 ) {
+
+            Product product = new Product();
+            Brand brand = null;
+            Category category = null;
+
+            try {
+                brand = daoBrand.getByText( String.valueOf(tblProducts.getValueAt(rowSelected, 3)) );
+                category = daoCategory.getByText( String.valueOf(tblProducts.getValueAt(rowSelected, 4)) );
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            product.setId( Integer.parseInt( String.valueOf( tblProducts.getValueAt(rowSelected, 0) ) ) );
+            product.setName( String.valueOf(tblProducts.getValueAt(rowSelected, 1)) );
+            product.setDescription( String.valueOf(tblProducts.getValueAt(rowSelected, 2)) );
+            product.setBrandIdFk( brand.getId() );
+            product.setCategoryIdFk( category.getId() );
+            product.setElaborationDate( (Date) tblProducts.getValueAt(rowSelected, 5));
+            product.setExpirationDate( (Date) tblProducts.getValueAt(rowSelected, 6));
+            product.setGrossPrice( Integer.parseInt( String.valueOf(tblProducts.getValueAt(rowSelected, 7)) ) );
+            product.setNetPrice( Integer.parseInt( String.valueOf(tblProducts.getValueAt(rowSelected, 8)) ) );
+            product.setStock( Integer.parseInt( String.valueOf(tblProducts.getValueAt(rowSelected, 9)) ) );
+
+            SwingUtilities.invokeLater(() -> {
+                new FormUpdateProd(
+                        connection,
+                        daoProduct,
+                        daoBrand,
+                        daoCategory,
+                        product,
+                        this
+                );
+            });
+        } else {
+            JOptionPane.showMessageDialog(this, "Dont selected row", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     public void refresh_table_product() throws SQLException {
         List<Product> products = daoProduct.getAll();
         if (products != null){
+            int rowCount = modelProducts.getRowCount();
+            for (int i = rowCount - 1; i > 0; i--) {
+                modelProducts.removeRow(i);
+            }
+
             for (Product product : products) {
                 modelProducts.addRow(new Object[]{
                         product.getId(),
@@ -188,6 +245,31 @@ public class FormMain extends JFrame{
     public void refresh_table_historyPrice() throws SQLException {
         List<PriceHistory> priceHistories = daoPriceHistory.getAll();
         if (priceHistories != null) {
+            int rowCount = modelHistory.getRowCount();
+            for (int i = rowCount - 1; i > 0; i--) {
+                modelHistory.removeRow(i);
+            }
+
+            for (PriceHistory priceHistory : priceHistories) {
+                modelHistory.addRow(new Object[]{
+                        priceHistory.getId(),
+                        daoProduct.getById(priceHistory.getProductIdFk()).getName(),
+                        priceHistory.getActualPrice(),
+                        priceHistory.getNewPrice(),
+                        priceHistory.getUpdateDate()
+                });
+            }
+        }
+    }
+
+    public void refresh_table_historyPrice(ActionEvent actionEvent) throws SQLException {
+        List<PriceHistory> priceHistories = daoPriceHistory.getAll();
+        if (priceHistories != null) {
+            int rowCount = modelHistory.getRowCount();
+            for (int i = rowCount - 1; i > 0; i--) {
+                modelHistory.removeRow(i);
+            }
+
             for (PriceHistory priceHistory : priceHistories) {
                 modelHistory.addRow(new Object[]{
                         priceHistory.getId(),

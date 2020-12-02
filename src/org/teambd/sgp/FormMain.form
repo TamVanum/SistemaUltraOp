@@ -114,7 +114,7 @@
                           <gridbag weightx="1.0" weighty="0.0"/>
                         </constraints>
                         <properties>
-                          <text value="Actualizar"/>
+                          <text value="Refrescar"/>
                         </properties>
                       </component>
                       <scrollpane id="28641" binding="srcHistory">

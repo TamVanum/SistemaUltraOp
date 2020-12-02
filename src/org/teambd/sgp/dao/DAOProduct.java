@@ -97,7 +97,7 @@ public class DAOProduct implements DAO<Product> {
     @Override
     public int update(Product product) throws SQLException {
         String sql = "UPDATE product SET name = ?, description = ?, brand_id_fk = ?, category_id_fk = ?, elaboration_date = ?, " +
-                "expiration_date = ?,  gross_price = ?,  net_price = ?,  stock = ? "+
+                "expiration_date = ?,  gross_price = ?,  net_price = ?,  stock = ?, is_great = ? "+
                 "WHERE id = ?";
 
         PreparedStatement preparedStatement = myConnection.getConnection().prepareStatement(sql);
@@ -110,7 +110,8 @@ public class DAOProduct implements DAO<Product> {
         preparedStatement.setInt(7, product.getGrossPrice());
         preparedStatement.setInt(8, product.getNetPrice());
         preparedStatement.setInt(9, product.getStock());
-        preparedStatement.setInt(10,product.getId());
+        preparedStatement.setInt(10, product.isGreat() ? 1 : 0);
+        preparedStatement.setInt(11, product.getId());
 
         int rowAffected = preparedStatement.executeUpdate();
 

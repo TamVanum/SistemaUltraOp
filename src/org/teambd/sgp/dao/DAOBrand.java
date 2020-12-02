@@ -16,6 +16,27 @@ public class DAOBrand implements DAO<Brand> {
         this.connection = connection;
     }
 
+    public Brand getByText(String text) throws SQLException {
+        String sql = "SELECT id, name FROM brand WHERE name = ? ORDER BY id ASC;";
+        Brand brand;
+
+        PreparedStatement ps = connection
+                .getConnection()
+                .prepareStatement(sql);
+        ps.setString(1, text);
+        ResultSet rs = ps.executeQuery();
+        if ( rs.next() ) {
+            brand = new Brand(
+                    rs.getInt("id"),
+                    rs.getString("name")
+            );
+        } else {
+            brand = null;
+        }
+
+        return brand;
+    }
+
     @Override
     public List<Brand> getAll() throws SQLException {
         String sql = "SELECT id, name FROM brand;";

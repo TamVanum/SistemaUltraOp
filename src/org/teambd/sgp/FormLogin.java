@@ -6,10 +6,7 @@ import org.teambd.sgp.models.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.sql.SQLException;
 import java.text.Normalizer;
 
@@ -42,6 +39,7 @@ public class FormLogin extends JFrame{
         setVisible(true);
 
         btnLoggin.setBackground(Color.decode("#9E9E9E"));
+        btnLoggin.setMnemonic(KeyEvent.VK_L);
         btnLoggin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -78,6 +76,9 @@ public class FormLogin extends JFrame{
                             });
                             setVisible(false);
                         } else {
+                            txtUser.setText("");
+                            pswPass.setText("");
+                            txtUser.requestFocus();
                             JOptionPane.showMessageDialog(null, "User not found in db", "Warning", JOptionPane.WARNING_MESSAGE);
                         }
                     } catch (SQLException throwables) {
@@ -85,7 +86,10 @@ public class FormLogin extends JFrame{
                     }
 
                 } else {
-                   JOptionPane.showMessageDialog(null, "Empty Fields", "Warning", JOptionPane.WARNING_MESSAGE);
+                    txtUser.setText("");
+                    pswPass.setText("");
+                    txtUser.requestFocus();
+                    JOptionPane.showMessageDialog(null, "Empty Fields", "Warning", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
