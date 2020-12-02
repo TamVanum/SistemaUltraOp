@@ -107,24 +107,9 @@ public class DAOBrand implements DAO<Brand> {
         return rowsAffected;
     }
 
-    public void createProcedure() throws SQLException {
-        String sql = "CREATE PROCEDURE recursive_eliminator_brand(IN _id INT) " +
-                "BEGIN " +
-                "DECLARE have_childs INT; " +
-                "SET have_childs = (SELECT COUNT(*) FROM product WHERE brand_id_fk = _id ); " +
-                "IF have_childs > 0 THEN " +
-                "DELETE FROM product WHERE id IN (SELECT id FROM product WHERE brand_id_fk = _id); " +
-                "DELETE FROM brand WHERE id = _id; " +
-                "ELSE " +
-                "DELETE FROM brand WHERE id = _id; " +
-                "END IF; " +
-                "END";
-        PreparedStatement ps = connection.getConnection().prepareStatement(sql);
-        ps.execute();
-    }
-
     @Override
     public int delete(int id) throws SQLException {
+
         String sql = "{ call recursive_eliminator_brand(?) }";
         CallableStatement cs = connection.getConnection().prepareCall(sql);
         cs.setInt(1, id);

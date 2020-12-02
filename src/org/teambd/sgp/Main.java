@@ -14,8 +14,9 @@ public class Main {
         String passwordSantiago = "1324";
         String passwordGaston = "";
 
+        MyConnection connection = null;
         try {
-            MyConnection connection = new MyConnection(
+            connection = new MyConnection(
                     "localhost",
                     "poduct_stock",
                     "root",
@@ -41,7 +42,7 @@ public class Main {
         } catch (SQLException throwables) {
             JOptionPane.showMessageDialog(null, "Connection failed", "Error", JOptionPane.ERROR_MESSAGE);
             throwables.printStackTrace();
-        }
+        } 
 
     }
 

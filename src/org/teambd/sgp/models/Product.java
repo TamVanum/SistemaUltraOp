@@ -52,8 +52,6 @@ public class Product {
     public void setName(String name) {
         if ( !name.isBlank() ) {
             this.name = name;
-        } else {
-            throw new IllegalArgumentException("Empty name!!");
         }
     }
 
@@ -75,8 +73,6 @@ public class Product {
     public void setBrandIdFk(int brandIdFk) {
         if ( brandIdFk > 0 ) {
             this.brandIdFk = brandIdFk;
-        } else {
-            throw new IllegalArgumentException("Brand id negative!!");
         }
     }
 
@@ -87,8 +83,6 @@ public class Product {
     public void setCategoryIdFk(int categoryIdFk) {
         if ( categoryIdFk > 0 ) {
             this.categoryIdFk = categoryIdFk;
-        } else {
-            throw new IllegalArgumentException("Category id negative!!");
         }
     }
 
@@ -115,8 +109,6 @@ public class Product {
     public void setGrossPrice(int grossPrice) {
         if ( grossPrice > 0 ) {
             this.grossPrice = grossPrice;
-        } else {
-            throw new IllegalArgumentException("Price negative!!");
         }
     }
 
@@ -127,8 +119,6 @@ public class Product {
     public void setNetPrice(int netPrice) {
         if ( netPrice > 0 ) {
             this.netPrice = netPrice;
-        } else {
-            throw new IllegalArgumentException("Price negative!!");
         }
     }
 
@@ -139,8 +129,6 @@ public class Product {
     public void setStock(int stock) {
         if ( stock > 0 ) {
             this.stock = stock;
-        } else {
-            throw new IllegalArgumentException("Negative stock!!");
         }
     }
 

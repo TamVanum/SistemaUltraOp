@@ -33,6 +33,9 @@ public class DAOProduct implements DAO<Product> {
         if ( resultSet.next() ) {
             products = new ArrayList<>();
             do {
+                try {
+
+
                 products.add(new Product(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
@@ -47,6 +50,9 @@ public class DAOProduct implements DAO<Product> {
                         resultSet.getBoolean("is_great"),
                         resultSet.getBoolean("is_active")
                 ));
+                } catch (IllegalArgumentException e) {
+                    System.out.println(e.getMessage());
+                }
             } while (resultSet.next() );
         }else {
             products = null;
