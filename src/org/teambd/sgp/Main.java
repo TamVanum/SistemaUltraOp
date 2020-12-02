@@ -17,7 +17,7 @@ public class Main {
         try {
             MyConnection connection = new MyConnection(
                     "localhost",
-                    "poduct_stock",
+                    "inventary_stock",
                     "root",
                     passwordSantiago
             );

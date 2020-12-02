@@ -48,10 +48,6 @@ public class FormMain extends JFrame{
     private JScrollPane srcHistory;
     private JScrollPane tblBrands;
     private JScrollPane srcCategories;
-    private JPanel pnlCachero;
-    private JPanel pnlCacheroContent;
-    private JButton btnMostrarCachero;
-    private JTable table1;
     private JButton btnModifyCat;
     private JButton btnModifyBrand;
     // endregion

@@ -1,7 +1,7 @@
 -- Database
-DROP DATABASE IF EXISTS product_stock;
-CREATE DATABASE product_stock;
-USE product_stock;
+DROP DATABASE IF EXISTS inventary_stock;
+CREATE DATABASE inventary_stock;
+USE inventary_stock;
 
 -- Tables
 DROP TABLE IF EXISTS user;
@@ -65,14 +65,14 @@ CREATE TABLE price_history (
 
 -- Function
 
+
 -- Procedures
 DROP PROCEDURE IF EXISTS recursive_eliminator_brand;
 DELIMITER //
-CREATE PROCEDURE recursive_eliminator_brand(IN _id INT)
+CREATE PROCEDURE recursive_eliminator_brand (IN _id INT)
 BEGIN
     DECLARE have_childs INT;
     SET have_childs = (SELECT COUNT(*) FROM product WHERE brand_id_fk = _id );
-
 
     IF have_childs > 0 THEN
         DELETE FROM product WHERE id IN (SELECT id FROM product WHERE brand_id_fk = _id);
