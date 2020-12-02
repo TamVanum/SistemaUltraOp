@@ -16,6 +16,26 @@ public class DAOCategory implements DAO<Category> {
         this.connection = connection;
     }
 
+    public Category getByText(String text) throws SQLException {
+        String sql = "SELECT id, name FROM category WHERE name = ? ORDER BY id ASC;";
+        Category category;
+
+        PreparedStatement ps = connection
+                .getConnection()
+                .prepareStatement(sql);
+        ps.setString(1, text);
+        ResultSet rs = ps.executeQuery();
+        if ( rs.next() ) {
+            category = new Category(
+                    rs.getInt("id"),
+                    rs.getString("name")
+            );
+        } else {
+            category = null;
+        }
+        return category;
+    }
+
     @Override
     public List<Category> getAll() throws SQLException {
         String sql = "SELECT id, name FROM category;";

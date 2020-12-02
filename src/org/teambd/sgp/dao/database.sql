@@ -63,9 +63,17 @@ CREATE TABLE price_history (
     FOREIGN KEY(product_id_fk) REFERENCES product(id)
 );
 
-
 -- Function
 
+
+-- Procedures
+DROP PROCEDURE IF EXISTS recursive_eliminator;
+DELIMITER //
+CREATE PROCEDURE recursive_eliminator()
+BEGIN
+
+END //
+DELIMITER ;
 
 
 -- Triggers
@@ -84,9 +92,11 @@ DELIMITER //
 CREATE TRIGGER change_price BEFORE UPDATE ON product
     FOR EACH ROW
 BEGIN
-    INSERT INTO price_history (product_id_fk, actual_price, new_price, update_date)
-    VALUES (OLD.id, OLD.gross_price, NEW.gross_price, NOW());
-    SET NEW.net_price = NEW.gross_price * 1.19;
+    IF OLD.gross_price != NEW.gross_price THEN
+        INSERT INTO price_history (product_id_fk, actual_price, new_price, update_date)
+        VALUES (OLD.id, OLD.gross_price, NEW.gross_price, NOW());
+        SET NEW.net_price = NEW.gross_price * 1.19;
+    END IF;
 END //
 DELIMITER ;
 
