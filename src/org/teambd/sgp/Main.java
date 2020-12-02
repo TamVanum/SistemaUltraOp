@@ -19,7 +19,7 @@ public class Main {
                     "localhost",
                     "poduct_stock",
                     "root",
-                    passwordGaston
+                    passwordSantiago
             );
 
             try {
