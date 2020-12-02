@@ -17,8 +17,6 @@ import java.util.List;
 import java.sql.SQLException;
 
 public class FormMain extends JFrame{
-
-    // region Components
     private JPanel pnlMain;
     private JPanel pnlContent;
     private JTabbedPane tbdOptions;
@@ -51,13 +49,11 @@ public class FormMain extends JFrame{
     private JPanel pnlCachero;
     private JPanel pnlCacheroContent;
     private JButton btnMostrarCachero;
-    private JTable table1;
+    private JTable tblCachero;
     private JButton btnModifyCat;
     private JButton btnModifyBrand;
-
     private JButton btnActivateProd;
     private JComboBox cboActivateProd;
-    // endregion
 
     private MyConnection connection;
     private DAOProduct daoProduct;
@@ -71,8 +67,9 @@ public class FormMain extends JFrame{
     private DefaultTableModel modelCategories;
     private DefaultTableModel modelBrands;
     private DefaultTableModel modelHistory;
+    private DefaultTableModel modelCachero;
 
-    public FormMain(MyConnection connection){
+    public FormMain(MyConnection connection) {
         super("Menu");
         this.connection = connection;
         add(pnlMain);
@@ -149,46 +146,40 @@ public class FormMain extends JFrame{
             throwables.printStackTrace();
         }
 
+        /** TABLA CACHERO */
+        modelCachero = new DefaultTableModel();
+        modelCachero.addColumn("Id");
+        modelCachero.addColumn("Name");
+        modelCachero.addColumn("Description");
+        modelCachero.addColumn("Brand");
+        modelCachero.addColumn("Category");
+        modelCachero.addColumn("Elaboration_Date");
+        modelCachero.addColumn("Expiration_Date");
+        modelCachero.addColumn("Gross_Price");
+        modelCachero.addColumn("Net_Price");
+        modelCachero.addColumn("Stock");
+        tblCachero.setModel(modelCachero);
+
+
+        /** NO FUNCIONA
+        try {
+            showCachero();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+         */
+
 
         /** Boton actualizar de Category */
         btnCategories.addActionListener(this::addCategory);
+
         btnModifyCat.addActionListener(this::updateCategory);
-        btnDeleteCat.setEnabled(false);
-
-        btnBrands.addActionListener(this::addBrand);
-        btnModifyBrand.addActionListener(this::updateBrand);
-        btnDeleteBrand.addActionListener(this::deleteBrand);
-        btnDeleteBrand.setEnabled(false);
-
-
-
-        chkConfirmCat.setEnabled(false);
-        chkConfirmBrand.setEnabled(false);
-
-        chkConfirmBrand.setSelected(false);
-        chkConfirmBrand.setSelected(false);
-
-        chkConfirmBrand.addItemListener((e)-> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                btnDeleteBrand.setEnabled(true);
-            } else {
-                btnDeleteBrand.setEnabled(false);
-            }
-        });
-
-        chkConfirmCat.addItemListener((e)-> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                btnDeleteCat.setEnabled(true);
-            } else {
-                btnDeleteCat.setEnabled(false);
-            }
-        });
 
         btnActualizar.setMnemonic(KeyEvent.VK_C);
         btnActualizar.addActionListener(this::updateProduct);
         btnHistProd.addActionListener(actionEvent -> {
             try {
-                refresh_table_historyPrice();
+                refresh_table_historyPrice(actionEvent);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -200,162 +191,89 @@ public class FormMain extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 int row = tblCategories.rowAtPoint(e.getPoint());
-                if (row >= 0){
-                    txtCategories.setText(String.valueOf(tblCategories.getValueAt(row , 1)));
-                    if ( tblCategories.getSelectedRow() != -1 ) {
-                        chkConfirmCat.setEnabled(true);
-                    } else {
-                        txtCategories.setText("");
-                        chkConfirmCat.setEnabled(false);
-                    }
+                int col = tblCategories.columnAtPoint(e.getPoint());
+                if (row >= 0 && col >= 0) {
+                    txtCategories.setText(String.valueOf(tblCategories.getValueAt(row, 1)));
+
+
                 }
 
             }
         });
 
-        tblMarcas.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                int row = tblMarcas.rowAtPoint(e.getPoint());
-                if (row >= 0){
-                    txtBrands.setText(String.valueOf(tblMarcas.getValueAt(row , 1)));
-                    if ( tblMarcas.getSelectedRow() != -1 ) {
-                        chkConfirmBrand.setEnabled(true);
-                    } else {
-                        txtBrands.setText("");
-                        chkConfirmBrand.setEnabled(false);
-                    }
-                }
-            }
+        btnAgregar.addActionListener(this::addProduct);
+
+
+    }
+
+
+
+    private void addProduct(ActionEvent actionEvent) {
+
+        SwingUtilities.invokeLater(()->{
+            new FormAddProd(connection, daoProduct, daoBrand, daoCategory, this);
         });
+
+
+
+
     }
 
-    private void deleteBrand(ActionEvent actionEvent) {
-        int rowSelected = tblMarcas.getSelectedRow();
-        if ( rowSelected != -1 ) {
-            try {
-                System.out.println((int) tblMarcas.getValueAt(rowSelected, 0));
-                int rowsAffected = daoBrand.delete( (int) tblMarcas.getValueAt(rowSelected, 0) );
-                System.out.println(rowsAffected);
-
-                refresh_table_brands();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "No selected row", "Warning", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-
-    private void updateBrand(ActionEvent actionEvent) {
-        int rowSelected = tblMarcas.getSelectedRow();
-        if (rowSelected != -1) {
-
-            try {
-                Brand brand = new Brand(
-                        (int) tblMarcas.getValueAt(rowSelected, 0),
-                        txtBrands.getText()
-                );
-
-                int rowsAffected = daoBrand.update(brand);
-                System.out.println(rowsAffected);
-
-                txtBrands.setText("");
-                txtBrands.requestFocus();
-                refresh_table_brands();
-            } catch (SQLException throwables) {
-                txtBrands.setText("");
-                throwables.printStackTrace();
-            } catch (IllegalArgumentException ex) {
-                txtBrands.setText("");
-                JOptionPane.showMessageDialog(this, "Empty field", "Warning", JOptionPane.WARNING_MESSAGE);
-            }
-        } else {
-            txtBrands.setText("");
-            JOptionPane.showMessageDialog(this, "No selected row", "Warning", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-
-    private void addBrand(ActionEvent actionEvent) {
-        int rowSelected = tblMarcas.getSelectedRow();
-        if (rowSelected == -1) {
-            Brand brand = new Brand();
-
-            try {
-                brand.setName( txtBrands.getText() );
-
-                int rowsAffected = daoBrand.insert(brand);
-                System.out.println(rowsAffected);
-
-                txtBrands.setText("");
-                txtBrands.requestFocus();
-                refresh_table_brands();
-            } catch (SQLException throwables) {
-                txtBrands.setText("");
-                throwables.printStackTrace();
-            } catch (IllegalArgumentException ex) {
-                txtBrands.setText("");
-                JOptionPane.showMessageDialog(this, "Empty field", "Warning", JOptionPane.WARNING_MESSAGE);
-            }
-        } else {
-            txtBrands.setText("");
-        }
-    }
-        
 
     private void addCategory(ActionEvent actionEvent) {
+
+        Category category = new Category();
         int rowSelected = tblCategories.getSelectedRow();
-        if (rowSelected == -1) {
-            Category category = new Category();
+        if (rowSelected != -1){
 
-            try {
-                category.setName( txtCategories.getText() );
+        }else {
+            if (txtCategories.getText().isBlank()){
+                JOptionPane.showMessageDialog(null,"Empty field", "Error", JOptionPane.WARNING_MESSAGE);
+            }else {
+                String newCat = txtCategories.getText();
+                category.setName(newCat);
+                try {
+                    daoCategory.insert(category);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
 
-                int rowsAffected = daoCategory.insert(category);
-                System.out.println(rowsAffected);
-
-                txtCategories.setText("");
-                txtCategories.requestFocus();
-                refresh_table_categories();
-            } catch (SQLException throwables) {
-                txtCategories.setText("");
-                throwables.printStackTrace();
-            } catch (IllegalArgumentException ex) {
-                txtCategories.setText("");
-                JOptionPane.showMessageDialog(this, "Empty field", "Warning", JOptionPane.WARNING_MESSAGE);
+                try {
+                    this.refresh_table_categories();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
-        } else {
-            txtCategories.setText("");
         }
+
     }
 
     private void updateCategory(ActionEvent actionEvent) {
+        Category category = new Category();
         int rowSelected = tblCategories.getSelectedRow();
         if (rowSelected != -1) {
 
-            try {
-                Category category = new Category(
-                        (int) tblCategories.getValueAt(rowSelected, 0),
-                        txtCategories.getText()
-                );
+        }else {
+            if (txtCategories.getText().isBlank()){
+                JOptionPane.showMessageDialog(null,"Empty field", "Error", JOptionPane.WARNING_MESSAGE);
+            }else {
+                //actualizar mode
+                category.setName(txtCategories.getText());
 
-                int rowsAffected = daoCategory.update(category);
-                System.out.println(rowsAffected);
+                int rowsAffected = 0;
+                try {
+                    rowsAffected = daoCategory.update(category);
+                    System.out.println(rowsAffected);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
 
-                txtCategories.setText("");
-                txtCategories.requestFocus();
-                refresh_table_categories();
-            } catch (SQLException throwables) {
-                txtCategories.setText("");
-                throwables.printStackTrace();
-            } catch (IllegalArgumentException ex) {
-                txtCategories.setText("");
-                JOptionPane.showMessageDialog(this, "Empty field", "Warning", JOptionPane.WARNING_MESSAGE);
+                try {
+                    this.refresh_table_categories();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
-        } else {
-            txtCategories.setText("");
-            JOptionPane.showMessageDialog(this, "No selected row", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -386,6 +304,15 @@ public class FormMain extends JFrame{
             product.setStock( Integer.parseInt( String.valueOf(tblProducts.getValueAt(rowSelected, 9)) ) );
 
 
+
+        /** Boton Actualizar de Producto*/
+        btnActualizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
             SwingUtilities.invokeLater(() -> {
                 new FormUpdateProd(
                         connection,
@@ -401,6 +328,32 @@ public class FormMain extends JFrame{
         }
 
 
+    }
+
+    private void showCachero() throws SQLException {
+        List<Product> products2 = daoProduct.getAllCachero();
+        if (products2 != null){
+            int rowCount = modelProducts.getRowCount();
+            for (int i = rowCount - 1; i > 0; i--) {
+                modelProducts.removeRow(i);
+            }
+            for (Product product : products2){
+                modelCachero.addRow(new Object[]{
+                        product.getId(),
+                        product.getName(),
+                        product.getDescription(),
+                        daoBrand.getById(product.getBrandIdFk()).getName(),
+                        daoCategory.getById(product.getCategoryIdFk()).getName(),
+                        product.getElaborationDate(),
+                        product.getExpirationDate(),
+                        product.getGrossPrice(),
+                        product.getNetPrice(),
+                        product.getStock()
+                });
+            }
+
+
+         }
     }
 
 
@@ -450,10 +403,6 @@ public class FormMain extends JFrame{
     public void refresh_table_brands() throws SQLException {
         List<Brand> brands = daoBrand.getAll();
         if (brands != null){
-            int rowCount = modelBrands.getRowCount();
-            for (int i = rowCount - 1; i > 0; i--) {
-                modelBrands.removeRow(i);
-            }
             for (Brand brand : brands) {
                 modelBrands.addRow(new Object[]{
                         brand.getId(),
@@ -464,6 +413,26 @@ public class FormMain extends JFrame{
     }
 
     public void refresh_table_historyPrice() throws SQLException {
+        List<PriceHistory> priceHistories = daoPriceHistory.getAll();
+        if (priceHistories != null) {
+            int rowCount = modelHistory.getRowCount();
+            for (int i = rowCount - 1; i > 0; i--) {
+                modelHistory.removeRow(i);
+            }
+
+            for (PriceHistory priceHistory : priceHistories) {
+                modelHistory.addRow(new Object[]{
+                        priceHistory.getId(),
+                        daoProduct.getById(priceHistory.getProductIdFk()).getName(),
+                        priceHistory.getActualPrice(),
+                        priceHistory.getNewPrice(),
+                        priceHistory.getUpdateDate()
+                });
+            }
+        }
+    }
+
+    public void refresh_table_historyPrice(ActionEvent actionEvent) throws SQLException {
         List<PriceHistory> priceHistories = daoPriceHistory.getAll();
         if (priceHistories != null) {
             int rowCount = modelHistory.getRowCount();
