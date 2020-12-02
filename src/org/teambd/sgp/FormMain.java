@@ -89,6 +89,7 @@ public class FormMain extends JFrame{
         daoCategory = new DAOCategory(this.connection);
         daoPriceHistory = new DAOPriceHistory(this.connection);
 
+
         /** TABLA DE PRODUCTOS */
         modelProducts = new DefaultTableModel();
         modelProducts.addColumn("Id");
