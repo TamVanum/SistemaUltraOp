@@ -54,6 +54,9 @@ public class FormMain extends JFrame{
     private JTable table1;
     private JButton btnModifyCat;
     private JButton btnModifyBrand;
+
+    private JButton btnActivateProd;
+    private JComboBox cboActivateProd;
     // endregion
 
     private MyConnection connection;

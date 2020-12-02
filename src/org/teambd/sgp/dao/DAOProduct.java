@@ -121,6 +121,29 @@ public class DAOProduct implements DAO<Product> {
     // TODO: En vez de hacer un delete, hacer un update
     @Override
     public int delete(int id) throws SQLException {
-        return 0;
+        Product product = new Product();
+
+        String sql = "UPDATE product SET is_active = 0 "+
+                "WHERE id = ?";
+        PreparedStatement preparedStatement = myConnection.getConnection().prepareStatement(sql);
+        preparedStatement.setInt(1, product.getId());
+
+        int rowAffected = preparedStatement.executeUpdate();
+
+        return rowAffected;
     }
+
+    public int activate(int id) throws SQLException {
+        Product product = new Product();
+
+        String sql = "UPDATE product SET is_active = 1 "+
+                "WHERE id = ?";
+        PreparedStatement preparedStatement = myConnection.getConnection().prepareStatement(sql);
+        preparedStatement.setInt(1, product.getId());
+
+        int rowAffected = preparedStatement.executeUpdate();
+
+        return rowAffected;
+    }
+
 }
