@@ -1,8 +1,12 @@
 # SistemaUltraOp 
 
 ## Descripción
-Sistema encargado principalmente en la asistencia del **stock de los productos**, 
-ya sea de una tienda comercial, Supermercado, Minimarket, etc. 
+Sistema encargado del manejo de inventario enfocado a productos, categorizandolos en sus areas 
+respectivas junto con sus marcas, dando la posibilidad de: añadir, eliminar y actualizar informacion.
+Puede ser implementado en tiendas comerciales en general, por ejemplo: Supermercado, Minimarket, etc.
+Busca llevar registro sobre los cambios en precios y diferenciar entre productos destacados y 
+los que no.
+
 
 ## Integrantes
 - **Gastón Hernán Cathalifaud Rosales**
